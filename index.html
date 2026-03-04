@@ -1417,7 +1417,130 @@ const P1 = () => {
 
   return (
     <>
-      {/* ===== NEW HERO: Two Ways to Price Fear ===== */}
+      {/* ===== HERO: "What is the probability..." ===== */}
+      <div
+        style={{
+          textAlign: "center",
+          padding: "28px 0 20px",
+          animation: "fadeIn 0.6s ease",
+        }}
+      >
+        <div
+          style={{
+            fontSize: "14px",
+            fontFamily: T.mono,
+            letterSpacing: "3px",
+            color: T.muted,
+            marginBottom: "10px",
+          }}
+        >
+          PIX — PROBABILITY INDEX
+        </div>
+        <div
+          style={{
+            fontSize: "30px",
+            fontWeight: 800,
+            fontFamily: T.display,
+            color: T.text,
+            marginBottom: "8px",
+            lineHeight: 1.2,
+          }}
+        >
+          What is the probability that price
+          <br />
+          moves a given amount in a given time?
+        </div>
+        <div
+          style={{
+            fontSize: "13px",
+            color: T.muted,
+            maxWidth: "720px",
+            margin: "0 auto 20px",
+            lineHeight: 1.7,
+          }}
+        >
+          This one question drives risk management and liquidity across the entire financial universe.
+          <br /><br />
+          Margin ratios depend on it. Auto-liquidation thresholds depend on it. Loan-to-value depends on it. Automated risk engines depend on it.
+          <br /><br />
+          PIX answers it.
+          <br /><br />
+          A continuous, constant-maturity index. The trusted number that always answers the same question, no matter when you ask it.
+        </div>
+        <div
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "16px",
+            padding: "20px 38px",
+            background: `linear-gradient(135deg,${T.greenG},rgba(0,200,83,0.02))`,
+            borderRadius: T.rl,
+            border: `1px solid ${T.borderA}`,
+          }}
+        >
+          <div>
+            <div
+              style={{
+                fontSize: "10px",
+                color: T.muted,
+                fontFamily: T.mono,
+                letterSpacing: "1px",
+              }}
+            >
+              PIX-SPX-30D-DN10%
+            </div>
+            <div
+              style={{
+                fontSize: "56px",
+                fontWeight: 800,
+                fontFamily: T.mono,
+                color: T.green,
+                lineHeight: 1,
+              }}
+            >
+              {heroAnimPix.toFixed(1)}
+            </div>
+            <div
+              style={{
+                fontSize: "11px",
+                color: T.muted,
+                marginTop: "4px",
+                whiteSpace: "nowrap",
+              }}
+            >
+              <span
+                style={{ fontFamily: T.mono, fontWeight: 700, color: T.green }}
+              >
+                {heroAnimPix.toFixed(1)}%
+              </span>{" "}
+              chance of SPX moving{" "}
+              <strong style={{ color: T.green }}>10% lower</strong> in{" "}
+              <strong style={{ color: T.green }}>30 days</strong>
+            </div>
+          </div>
+          <div style={{ width: "1px", height: "60px", background: T.border }} />
+          <div style={{ textAlign: "left" }}>
+            <div style={{ fontSize: "10px", color: T.muted, fontFamily: T.mono }}>
+              1 CONTRACT
+            </div>
+            <div style={{ fontSize: "10px", color: T.muted, fontFamily: T.mono }}>
+              POSITION VALUE
+            </div>
+            <div style={{ fontSize: "24px", fontWeight: 700, fontFamily: T.mono, color: T.green }}>
+              $970
+            </div>
+            <div style={{ fontSize: "10px", color: T.muted, fontFamily: T.mono, marginTop: "4px" }}>
+              $100/pt &middot; $10/tick
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ===== PIX in Plain Language — "Another X% From Right Here" ===== */}
+      <CrisisNarrative />
+      <div style={{ height: "16px" }} />
+
+      {/* ===== Two Ways to Price Fear ===== */}
       <div style={{
         display: "flex",
         flexDirection: "column",
@@ -1774,124 +1897,7 @@ const P1 = () => {
         )}
       </div>
 
-      {/* ===== OLD HERO: "What is the probability..." ===== */}
-      <div
-        style={{
-          textAlign: "center",
-          padding: "28px 0 20px",
-          animation: "fadeIn 0.6s ease",
-        }}
-      >
-        <div
-          style={{
-            fontSize: "14px",
-            fontFamily: T.mono,
-            letterSpacing: "3px",
-            color: T.muted,
-            marginBottom: "10px",
-          }}
-        >
-          PIX — PROBABILITY INDEX
-        </div>
-        <div
-          style={{
-            fontSize: "30px",
-            fontWeight: 800,
-            fontFamily: T.display,
-            color: T.text,
-            marginBottom: "8px",
-            lineHeight: 1.2,
-          }}
-        >
-          What is the probability that price
-          <br />
-          moves a given amount in a given time?
-        </div>
-        <div
-          style={{
-            fontSize: "13px",
-            color: T.muted,
-            maxWidth: "720px",
-            margin: "0 auto 20px",
-            lineHeight: 1.7,
-          }}
-        >
-          PIX translates the derivatives markets that price uncertainty into the
-          most intuitive unit in finance: probability.
-        </div>
-        <div
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "16px",
-            padding: "20px 38px",
-            background: `linear-gradient(135deg,${T.greenG},rgba(0,200,83,0.02))`,
-            borderRadius: T.rl,
-            border: `1px solid ${T.borderA}`,
-          }}
-        >
-          <div>
-            <div
-              style={{
-                fontSize: "10px",
-                color: T.muted,
-                fontFamily: T.mono,
-                letterSpacing: "1px",
-              }}
-            >
-              PIX-SPX-30D-DN10%
-            </div>
-            <div
-              style={{
-                fontSize: "56px",
-                fontWeight: 800,
-                fontFamily: T.mono,
-                color: T.green,
-                lineHeight: 1,
-              }}
-            >
-              {heroAnimPix.toFixed(1)}
-            </div>
-            <div
-              style={{
-                fontSize: "11px",
-                color: T.muted,
-                marginTop: "4px",
-                whiteSpace: "nowrap",
-              }}
-            >
-              <span
-                style={{ fontFamily: T.mono, fontWeight: 700, color: T.green }}
-              >
-                {heroAnimPix.toFixed(1)}%
-              </span>{" "}
-              chance of SPX moving{" "}
-              <strong style={{ color: T.green }}>10% lower</strong> in{" "}
-              <strong style={{ color: T.green }}>30 days</strong>
-            </div>
-          </div>
-          <div style={{ width: "1px", height: "60px", background: T.border }} />
-          <div style={{ textAlign: "left" }}>
-            <div style={{ fontSize: "10px", color: T.muted, fontFamily: T.mono }}>
-              1 CONTRACT
-            </div>
-            <div style={{ fontSize: "10px", color: T.muted, fontFamily: T.mono }}>
-              POSITION VALUE
-            </div>
-            <div style={{ fontSize: "24px", fontWeight: 700, fontFamily: T.mono, color: T.green }}>
-              $970
-            </div>
-            <div style={{ fontSize: "10px", color: T.muted, fontFamily: T.mono, marginTop: "4px" }}>
-              $100/pt &middot; $10/tick
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* ===== ORIGINAL P1 CONTENT BELOW ===== */}
-      {/* Crisis Narrative — "Another X% From Right Here" — the "holy sh*t" moment */}
-      <CrisisNarrative />
-      <div style={{ height: "16px" }} />
 
       {/* Barrier Visualization */}
       <Card>
