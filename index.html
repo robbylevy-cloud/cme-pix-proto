@@ -7492,7 +7492,7 @@ const STRATEGIES = [
   { id: "direct", label: "Direct Event View", contracts: 1 },
   { id: "butterfly", label: "Barrier Butterfly", contracts: 4 },
   { id: "crossasset", label: "Cross-Asset", contracts: 2 },
-  { id: "options", label: "Options on PIX Futures", contracts: "36+ chains" },
+  { id: "options", label: "Options on PIX Futures", contracts: "Per listing" },
   { id: "vrpcarry", label: "Contango Carry", contracts: 2 },
 ];
 
@@ -9006,16 +9006,13 @@ const P10Stack = () => {
   ];
 
   const assets = [
-    { name: "SPX", contracts: 100, options: 36, status: "Phase 1" },
-    { name: "BTC", contracts: 100, options: 36, status: "Phase 1" },
-    { name: "Crude", contracts: 80, options: 28, status: "Phase 2" },
-    { name: "Gold", contracts: 80, options: 28, status: "Phase 2" },
-    { name: "Rates", contracts: 60, options: 20, status: "Phase 3" },
-    { name: "Ag", contracts: 60, options: 20, status: "Phase 3" },
+    { name: "SPX", status: "Phase 1" },
+    { name: "BTC", status: "Phase 1" },
+    { name: "Crude", status: "Phase 2" },
+    { name: "Gold", status: "Phase 2" },
+    { name: "Rates", status: "Phase 3" },
+    { name: "Ag", status: "Phase 3" },
   ];
-
-  const totalFutures = assets.reduce((a, b) => a + b.contracts, 0);
-  const totalChains = assets.reduce((a, b) => a + b.options, 0);
 
   return (
     <Card>
