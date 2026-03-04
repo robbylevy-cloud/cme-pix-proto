@@ -8981,19 +8981,19 @@ const P10Stack = () => {
     },
     {
       label: "OPTIONS ON PIX FUTURES",
-      sub: "36+ independent chains per asset. Each surface point = an options chain.",
+      sub: "Each listed PIX futures contract supports a full options chain. Chain count scales with active listings.",
       rev: "Per-contract exchange fees",
       color: T.blue,
       size: 80,
-      contracts: "36+ chains/asset",
+      contracts: "Per listed contract",
     },
     {
       label: "PIX FUTURES",
-      sub: "100+ products per asset (9 tenors × barriers × directions). Standardized, clearable.",
+      sub: "Standardized, clearable futures contracts. Active listings vary by tenor and barrier depth with vol regime.",
       rev: "Per-contract exchange fees",
       color: T.green,
       size: 100,
-      contracts: "100+/asset",
+      contracts: "Regime-filtered",
     },
     {
       label: "PIX CASH INDEX",
@@ -9120,107 +9120,66 @@ const P10Stack = () => {
       >
         CROSS-ASSET EXPANSION — EVERY ASSET MULTIPLIES THE STACK
       </div>
-      <div className={mob ? "px-tscroll-narrow" : undefined} style={{ overflowX: "auto", marginBottom: "16px" }}>
-        <table
-          style={{
-            width: "100%",
-            borderCollapse: "collapse",
-            fontFamily: T.mono,
-            fontSize: "11px",
-          }}
-        >
-          <thead>
-            <tr style={{ borderBottom: `1px solid ${T.border}` }}>
-              {["ASSET", "FUTURES", "OPTIONS CHAINS", "PHASE"].map((h) => (
-                <th
-                  key={h}
-                  style={{
-                    padding: "6px 8px",
-                    textAlign:
-                      h === "ASSET" || h === "PHASE" ? "left" : "center",
-                    color: T.dim,
-                    fontSize: "9px",
-                  }}
-                >
-                  {h}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {assets.map((a) => (
-              <tr
-                key={a.name}
-                style={{ borderBottom: `1px solid ${T.border}` }}
-              >
-                <td
-                  style={{ padding: "6px 8px", color: T.text, fontWeight: 600 }}
-                >
-                  {a.name}
-                </td>
-                <td
-                  style={{
-                    padding: "6px 8px",
-                    textAlign: "center",
-                    color: T.green,
-                  }}
-                >
-                  {a.contracts}+
-                </td>
-                <td
-                  style={{
-                    padding: "6px 8px",
-                    textAlign: "center",
-                    color: T.blue,
-                  }}
-                >
-                  {a.options}+
-                </td>
-                <td style={{ padding: "6px 8px" }}>
-                  <span
-                    style={{
-                      fontSize: "9px",
-                      padding: "2px 8px",
-                      borderRadius: "3px",
-                      background:
-                        a.status === "Phase 1" ? `${T.green}10` : `${T.blue}10`,
-                      color: a.status === "Phase 1" ? T.green : T.blue,
-                    }}
-                  >
-                    {a.status}
-                  </span>
-                </td>
-              </tr>
-            ))}
-            <tr style={{ borderTop: `2px solid ${T.blue}40` }}>
-              <td style={{ padding: "8px", color: T.blue, fontWeight: 700 }}>
-                TOTAL
-              </td>
-              <td
-                style={{
-                  padding: "8px",
-                  textAlign: "center",
-                  color: T.blue,
-                  fontWeight: 700,
-                }}
-              >
-                {totalFutures}+
-              </td>
-              <td
-                style={{
-                  padding: "8px",
-                  textAlign: "center",
-                  color: T.blue,
-                  fontWeight: 700,
-                }}
-              >
-                {totalChains}+
-              </td>
-              <td />
-            </tr>
-          </tbody>
-        </table>
+      <div style={{ fontSize: "12px", color: T.muted, lineHeight: 1.7, marginBottom: "16px" }}>
+        Active contract count varies with vol regime. Listing decisions follow barrier-depth and tenor
+        liquidity filters &mdash; short tenors with deep barriers and long tenors with shallow barriers are
+        excluded when liquidity thresholds aren&rsquo;t met. Each listed contract supports a full options chain.
       </div>
+      <table
+        style={{
+          width: "100%",
+          borderCollapse: "collapse",
+          fontFamily: T.mono,
+          fontSize: "11px",
+          marginBottom: "16px",
+        }}
+      >
+        <thead>
+          <tr style={{ borderBottom: `1px solid ${T.border}` }}>
+            {["ASSET", "PHASE"].map((h) => (
+              <th
+                key={h}
+                style={{
+                  padding: "6px 8px",
+                  textAlign: "left",
+                  color: T.dim,
+                  fontSize: "9px",
+                }}
+              >
+                {h}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {assets.map((a) => (
+            <tr
+              key={a.name}
+              style={{ borderBottom: `1px solid ${T.border}` }}
+            >
+              <td
+                style={{ padding: "6px 8px", color: T.text, fontWeight: 600 }}
+              >
+                {a.name}
+              </td>
+              <td style={{ padding: "6px 8px" }}>
+                <span
+                  style={{
+                    fontSize: "9px",
+                    padding: "2px 8px",
+                    borderRadius: "3px",
+                    background:
+                      a.status === "Phase 1" ? `${T.green}10` : a.status === "Phase 2" ? `${T.blue}10` : `${T.amber}10`,
+                    color: a.status === "Phase 1" ? T.green : a.status === "Phase 2" ? T.blue : T.amber,
+                  }}
+                >
+                  {a.status}
+                </span>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
 
       {/* Arbitrage Web */}
       <div
@@ -9488,9 +9447,7 @@ const P10Stack = () => {
           <strong style={{ color: T.blue }}>
             VIX is 1 index → 1 futures chain → 1 options chain.
           </strong>{" "}
-          PIX is 100+ futures per asset → 36+ options chains per asset → across
-          6+ asset classes. Each asset added multiplies the entire product
-          stack. The franchise economics compound at every layer.
+          PIX generates multiple futures per asset &mdash; each listed contract supports a full options chain. Each asset added multiplies the stack. Active listings scale with vol regime and liquidity.
         </div>
       </div>
     </Card>
@@ -9511,9 +9468,9 @@ const P11Franchise = () => {
 
   const multipliers = [
     { label: "VIX: Products per asset", value: "1 index", color: T.dim },
-    { label: "PIX: Products per asset", value: "100+", color: T.green },
+    { label: "PIX: Products per asset", value: "Many", color: T.green },
     { label: "VIX: Options chains", value: "1", color: T.dim },
-    { label: "PIX: Options chains", value: "36+", color: T.blue },
+    { label: "PIX: Options chains", value: "Per listing", color: T.blue },
     { label: "VIX: Cross-asset", value: "SPX only", color: T.dim },
     { label: "PIX: Cross-asset", value: "6+ assets", color: T.blue },
   ];
@@ -9533,8 +9490,7 @@ const P11Franchise = () => {
         }}
       >
         VIX built a multi-billion dollar franchise from a single index on a
-        single asset. PIX starts with 100+ products per asset across 6+ asset
-        classes. The multiplier is structural, not aspirational.
+        single asset. PIX applies the same model across multiple assets and multiple products per asset &mdash; each regime-filtered, each independently listable, each generating its own options chain.
       </div>
 
       {/* VIX trajectory */}
@@ -9658,7 +9614,7 @@ const P11Franchise = () => {
           fontWeight: 600,
         }}
       >
-        TAM EXPANSION — EACH ASSET MULTIPLIES THE GRID
+        TAM EXPANSION — EACH ASSET MULTIPLIES THE STACK
       </div>
       <div
         style={{
@@ -9703,11 +9659,6 @@ const P11Franchise = () => {
             />
             <div style={{ fontSize: mob ? "9px" : "8px", fontFamily: T.mono, color: T.dim }}>
               {a.asset}
-            </div>
-            <div
-              style={{ fontSize: "9px", fontFamily: T.mono, color: T.muted }}
-            >
-              {a.mult * 100}+
             </div>
           </div>
         ))}
