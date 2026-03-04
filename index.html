@@ -12518,11 +12518,13 @@ const P20ArbWeb = () => {
       const touchProb = pixCash(mV, tB, dte);
       const impVix = impliedVIX(touchProb, tB, dte);
       const impPIX = pixCash(impVix, tB, tD);
+      const touchIV = getStripVol(impVix, tB, dte) * 100;
       instruments.push({
         label: `Touch ${strike.toLocaleString()} ${dte}d`,
         cat: "100s", catColor: T.purple,
         price: touchProb, priceLabel: f(touchProb, 1),
-        dte, impliedVIX: f(impVix, 1), impliedPIX: impPIX,
+        dte, iv: touchIV.toFixed(1) + "%",
+        impliedVIX: f(impVix, 1), impliedPIX: impPIX,
         dev: impPIX - pp,
       });
     }
@@ -12533,11 +12535,13 @@ const P20ArbWeb = () => {
       const settleProb = pixCash(mV, tB, dte) * 0.52;
       const impVix = impliedVIX(settleProb / 0.52, tB, dte);
       const impPIX = pixCash(impVix, tB, tD);
+      const settleIV = getStripVol(impVix, tB, dte) * 100;
       instruments.push({
         label: `Settle ${strike.toLocaleString()} ${dte}d`,
         cat: "100s", catColor: T.purple,
         price: settleProb, priceLabel: f(settleProb, 1),
-        dte, impliedVIX: f(impVix, 1), impliedPIX: impPIX,
+        dte, iv: settleIV.toFixed(1) + "%",
+        impliedVIX: f(impVix, 1), impliedPIX: impPIX,
         dev: impPIX - pp,
       });
     }
@@ -12569,7 +12573,8 @@ const P20ArbWeb = () => {
       instruments.push({
         label, cat: "VIX", catColor: T.blue,
         price: vf, priceLabel: f(vf, 1),
-        dte, impliedVIX: f(vf, 1), impliedPIX: impPIX,
+        dte, iv: f(vf, 1) + "%",
+        impliedVIX: f(vf, 1), impliedPIX: impPIX,
         dev: impPIX - pp,
       });
     }
@@ -12584,7 +12589,8 @@ const P20ArbWeb = () => {
       label: `VIX ${vixCallK}C 30d`,
       cat: "VIXOPT", catColor: T.blue,
       price: vixCallPrice, priceLabel: `$${f(vixCallPrice, 2)}`,
-      dte: 30, impliedVIX: f(vixFC, 1), impliedPIX: impPIXvC,
+      dte: 30, iv: "90%",
+      impliedVIX: f(vixFC, 1), impliedPIX: impPIXvC,
       dev: impPIXvC - pp,
     });
 
@@ -12762,7 +12768,7 @@ const P20ArbWeb = () => {
                       <div>
                         <span style={{ fontFamily: T.mono, fontSize: "11px", fontWeight: 600, color: T.text }}>{inst.label}</span>
                         <span style={{ fontFamily: T.mono, fontSize: "9px", color: T.dim, marginLeft: "8px" }}>{venue}</span>
-                        {inst.iv && <span style={{ fontFamily: T.mono, fontSize: "9px", color: T.dim, marginLeft: "6px" }}>{inst.iv} IV</span>}
+                        {inst.iv && <span style={{ fontFamily: T.mono, fontSize: "9px", color: T.dim, marginLeft: "6px" }}>{inst.iv} {inst.cat === "VIX" ? "VOL" : inst.cat === "VIXOPT" ? "VoV" : "IV"}</span>}
                       </div>
                       <div style={{ textAlign: "right" }}>
                         <div style={{ fontSize: "8px", fontFamily: T.mono, color: T.dim, marginBottom: "2px" }}>PRICE</div>
