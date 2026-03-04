@@ -12771,7 +12771,7 @@ const P20ArbWeb = () => {
 
           const SignalBar = ({ dev }) => {
             const pct = Math.min(Math.abs(dev) / maxDev, 1) * 100;
-            const col = dev > 0.3 ? T.green : dev < -0.3 ? T.red : T.dim;
+            const col = dev > 0.3 ? T.red : dev < -0.3 ? T.green : T.dim;
             return (
               <div style={{ display: "flex", alignItems: "center", gap: "6px", justifyContent: "flex-end" }}>
                 <span style={{ fontSize: "10px", fontFamily: T.mono, fontWeight: 700, color: col, minWidth: "40px", textAlign: "right" }}>
@@ -12822,7 +12822,7 @@ const P20ArbWeb = () => {
                       </div>
                       <div style={{ textAlign: "right" }}>
                         <div style={{ fontSize: "8px", fontFamily: T.mono, color: T.dim, marginBottom: "2px" }}>IMP PIX</div>
-                        <div style={{ fontFamily: T.mono, fontSize: "13px", fontWeight: 800, color: inst.dev > 0.3 ? T.green : inst.dev < -0.3 ? T.red : T.muted }}>
+                        <div style={{ fontFamily: T.mono, fontSize: "13px", fontWeight: 800, color: inst.dev > 0.3 ? T.red : inst.dev < -0.3 ? T.green : T.muted }}>
                           {f(inst.impliedPIX, 1)}
                         </div>
                       </div>
