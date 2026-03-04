@@ -12717,102 +12717,166 @@ const P20ArbWeb = () => {
 
       {/* Instrument Comparison Table */}
       <Card style={{ marginBottom: "20px" }}>
-        <div style={{ textAlign: "center", marginBottom: "16px" }}>
-          <Label>CROSS-MARKET PRICE DISCOVERY</Label>
-          <div style={{ fontSize: "12px", color: T.muted }}>
-            What does each instrument imply about PIX-30D-DN10%?
+        {/* Section header */}
+        <div style={{ marginBottom: "20px" }}>
+          <div style={{ fontSize: "9px", fontFamily: T.mono, letterSpacing: "2px", color: T.dim, marginBottom: "6px" }}>
+            CROSS-MARKET PRICE DISCOVERY
           </div>
-          <div style={{ fontSize: "9px", color: T.dim, marginTop: "4px", fontFamily: T.mono }}>
-            {disp === 0 ? "MODEL MODE \u2014 all instruments priced from VIX spot (no cross-venue dispersion)" :
-             `MARKET MODE \u2014 ${disp}% cross-venue dispersion (simulated)`}
+          <div style={{ fontSize: "13px", color: T.text, fontWeight: 600, marginBottom: "4px" }}>
+            What does each instrument imply about PIX-SPX-30D-DN10%?
+          </div>
+          <div style={{ fontSize: "9px", color: T.dim, fontFamily: T.mono }}>
+            {disp === 0
+              ? "MODEL MODE — all instruments priced from VIX spot · zero cross-venue dispersion"
+              : `MARKET MODE — ${disp}% simulated cross-venue dispersion`}
           </div>
         </div>
 
-        <div className={mob ? "px-tscroll" : undefined}>
-        <table style={{ width: "100%", borderCollapse: "collapse", fontFamily: T.mono, fontSize: "11px" }}>
-          <thead>
-            <tr style={{ borderBottom: `2px solid ${T.border}` }}>
-              {["INSTRUMENT", "MARKET", "PRICE", "IMP VIX", "IMP PIX", "vs PERP", "SIGNAL"].map((h, i) => (
-                <th key={i} style={{
-                  padding: "8px 10px", textAlign: i <= 1 ? "left" : "right",
-                  fontSize: mob ? "9px" : "8px", letterSpacing: "1px", color: T.dim, fontWeight: 700
-                }}>{h}</th>
+        {/* Summary strip */}
+        {(() => {
+          const allImplied = data.instruments.map(i => i.impliedPIX);
+          const minImp = Math.min(...allImplied);
+          const maxImp = Math.max(...allImplied);
+          const spread = maxImp - minImp;
+          const richCount = data.instruments.filter(i => i.dev > 0.3).length;
+          const cheapCount = data.instruments.filter(i => i.dev < -0.3).length;
+          return (
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "2px", marginBottom: "20px" }}>
+              {[
+                { label: "PERP MARK", value: f(pp), color: T.green, sub: "live trading price" },
+                { label: "IMPLIED RANGE", value: `${f(minImp, 1)} – ${f(maxImp, 1)}`, color: T.text, sub: "across all instruments" },
+                { label: "MAX SPREAD", value: f(spread, 2) + " pts", color: spread > 2 ? T.amber : T.dim, sub: "richest vs cheapest" },
+                { label: "SIGNALS", value: `${richCount} RICH · ${cheapCount} CHEAP`, color: richCount + cheapCount > 0 ? T.amber : T.dim, sub: "vs PERP mark ±0.3 threshold" },
+              ].map((s, i) => (
+                <div key={i} style={{ padding: "12px 14px", background: T.raised, borderRadius: T.rs, borderLeft: `3px solid ${s.color}40` }}>
+                  <div style={{ fontSize: "8px", fontFamily: T.mono, letterSpacing: "1.5px", color: T.dim, marginBottom: "4px" }}>{s.label}</div>
+                  <div style={{ fontSize: "14px", fontWeight: 800, fontFamily: T.mono, color: s.color }}>{s.value}</div>
+                  <div style={{ fontSize: "8px", color: T.dim, marginTop: "2px" }}>{s.sub}</div>
+                </div>
               ))}
-            </tr>
-          </thead>
-          <tbody>
-            {/* Target product row */}
-            <tr style={{ background: `${T.green}08`, borderBottom: `1px solid ${T.border}` }}>
-              <td style={{ padding: "10px", fontWeight: 700, color: T.green, fontSize: "12px" }}>
-                PIX-30D-DN10% PERP &#9664;
-              </td>
-              <td style={{ padding: "10px", color: T.green, fontSize: "9px" }}>100s</td>
-              <td style={{ padding: "10px", textAlign: "right", fontWeight: 800, color: T.green, fontSize: "14px" }}>{f(pp)}</td>
-              <td style={{ padding: "10px", textAlign: "right", color: T.muted }}>{f(data.perpImpVix, 1)}</td>
-              <td style={{ padding: "10px", textAlign: "right", fontWeight: 700, color: T.green }}>{f(pp)}</td>
-              <td style={{ padding: "10px", textAlign: "right", color: T.dim }}>&#8212;</td>
-              <td style={{ padding: "10px", textAlign: "center", color: T.dim }}>&#8212;</td>
-            </tr>
+            </div>
+          );
+        })()}
 
-            {/* Cash Index reference */}
-            <tr style={{ background: "rgba(255,255,255,.02)", borderBottom: `1px solid ${T.border}` }}>
-              <td style={{ padding: "10px", fontWeight: 600, color: T.muted }}>PIX-30D-DN10% Cash Index</td>
-              <td style={{ padding: "10px", color: T.dim, fontSize: "9px" }}>Model</td>
-              <td style={{ padding: "10px", textAlign: "right", fontWeight: 700 }}>{f(data.cash)}</td>
-              <td style={{ padding: "10px", textAlign: "right", color: T.muted }}>{f(vix, 1)}</td>
-              <td style={{ padding: "10px", textAlign: "right", fontWeight: 700 }}>{f(data.cash)}</td>
-              <td style={{ padding: "10px", textAlign: "right", fontWeight: 700, color: dc(data.cash - pp) }}>
+        {/* Instrument rows by category */}
+        {(() => {
+          const cats = [
+            { key: "100s",   label: "100s TOUCH & SETTLE", color: T.purple },
+            { key: "SPX",    label: "SPX PUT OPTIONS",      color: T.amber  },
+            { key: "VIX",    label: "VIX FUTURES",          color: T.blue   },
+            { key: "VIXOPT", label: "VIX OPTIONS",          color: T.blue   },
+          ];
+
+          const maxDev = Math.max(3, ...data.instruments.map(i => Math.abs(i.dev)));
+
+          const SignalBar = ({ dev }) => {
+            const pct = Math.min(Math.abs(dev) / maxDev, 1) * 100;
+            const col = dev > 0.3 ? T.green : dev < -0.3 ? T.red : T.dim;
+            return (
+              <div style={{ display: "flex", alignItems: "center", gap: "6px", justifyContent: "flex-end" }}>
+                <span style={{ fontSize: "10px", fontFamily: T.mono, fontWeight: 700, color: col, minWidth: "40px", textAlign: "right" }}>
+                  {dev >= 0 ? "+" : ""}{f(dev, 2)}
+                </span>
+                <div style={{ position: "relative", width: "60px", height: "8px", background: "rgba(255,255,255,.05)", borderRadius: "4px", overflow: "hidden" }}>
+                  <div style={{
+                    position: "absolute", top: 0, bottom: 0,
+                    ...(dev >= 0 ? { left: "50%", width: `${pct / 2}%` } : { right: "50%", width: `${pct / 2}%` }),
+                    background: col, borderRadius: "4px"
+                  }} />
+                  <div style={{ position: "absolute", left: "50%", top: -1, bottom: -1, width: "1px", background: T.dim + "60" }} />
+                </div>
+                <span style={{ fontSize: "8px", fontFamily: T.mono, color: col, minWidth: "36px" }}>
+                  {dev > 0.3 ? "RICH" : dev < -0.3 ? "CHEAP" : "FAIR"}
+                </span>
+              </div>
+            );
+          };
+
+          return cats.map(cat => {
+            const items = data.instruments.filter(i => i.cat === cat.key);
+            if (!items.length) return null;
+            return (
+              <div key={cat.key} style={{ marginBottom: "16px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "6px 0", marginBottom: "4px", borderBottom: `1px solid ${cat.color}30` }}>
+                  <span style={{ display: "inline-block", width: "6px", height: "6px", borderRadius: "50%", background: cat.color }} />
+                  <span style={{ fontSize: "8px", fontFamily: T.mono, letterSpacing: "1.5px", fontWeight: 700, color: cat.color }}>{cat.label}</span>
+                </div>
+                {items.map((inst, i) => {
+                  const venue = inst.cat === "SPX" ? "CME" : inst.cat === "VIX" || inst.cat === "VIXOPT" ? "CFE" : "100s";
+                  return (
+                    <div key={i} style={{
+                      display: "grid", gridTemplateColumns: "1fr auto auto 200px",
+                      gap: "12px", alignItems: "center",
+                      padding: "8px 10px", borderRadius: T.rs,
+                      background: i % 2 === 0 ? "rgba(255,255,255,.015)" : "transparent",
+                      marginBottom: "2px",
+                    }}>
+                      <div>
+                        <span style={{ fontFamily: T.mono, fontSize: "11px", fontWeight: 600, color: T.text }}>{inst.label}</span>
+                        <span style={{ fontFamily: T.mono, fontSize: "9px", color: T.dim, marginLeft: "8px" }}>{venue}</span>
+                        {inst.iv && <span style={{ fontFamily: T.mono, fontSize: "9px", color: T.dim, marginLeft: "6px" }}>{inst.iv} IV</span>}
+                      </div>
+                      <div style={{ textAlign: "right" }}>
+                        <div style={{ fontSize: "8px", fontFamily: T.mono, color: T.dim, marginBottom: "2px" }}>PRICE</div>
+                        <div style={{ fontFamily: T.mono, fontSize: "11px", fontWeight: 700, color: T.muted }}>{inst.priceLabel}</div>
+                      </div>
+                      <div style={{ textAlign: "right" }}>
+                        <div style={{ fontSize: "8px", fontFamily: T.mono, color: T.dim, marginBottom: "2px" }}>IMP PIX</div>
+                        <div style={{ fontFamily: T.mono, fontSize: "13px", fontWeight: 800, color: inst.dev > 0.3 ? T.green : inst.dev < -0.3 ? T.red : T.muted }}>
+                          {f(inst.impliedPIX, 1)}
+                        </div>
+                      </div>
+                      <div>
+                        <div style={{ fontSize: "8px", fontFamily: T.mono, color: T.dim, marginBottom: "4px", textAlign: "right" }}>vs PERP</div>
+                        <SignalBar dev={inst.dev} />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          });
+        })()}
+
+        {/* Cash Index reference row */}
+        <div style={{
+          display: "grid", gridTemplateColumns: "1fr auto auto 200px",
+          gap: "12px", alignItems: "center",
+          padding: "10px", marginTop: "8px",
+          borderTop: `1px solid ${T.border}`,
+          borderRadius: T.rs, background: "rgba(255,255,255,.02)"
+        }}>
+          <div>
+            <span style={{ fontFamily: T.mono, fontSize: "11px", fontWeight: 600, color: T.dim }}>PIX-SPX-30D-DN10% Cash Index</span>
+            <span style={{ fontFamily: T.mono, fontSize: "9px", color: T.dim, marginLeft: "8px" }}>Model</span>
+          </div>
+          <div style={{ textAlign: "right" }}>
+            <div style={{ fontSize: "8px", fontFamily: T.mono, color: T.dim, marginBottom: "2px" }}>PRICE</div>
+            <div style={{ fontFamily: T.mono, fontSize: "11px", fontWeight: 700, color: T.muted }}>{f(data.cash)}</div>
+          </div>
+          <div style={{ textAlign: "right" }}>
+            <div style={{ fontSize: "8px", fontFamily: T.mono, color: T.dim, marginBottom: "2px" }}>IMP PIX</div>
+            <div style={{ fontFamily: T.mono, fontSize: "13px", fontWeight: 800, color: T.muted }}>{f(data.cash, 1)}</div>
+          </div>
+          <div>
+            <div style={{ fontSize: "8px", fontFamily: T.mono, color: T.dim, marginBottom: "4px", textAlign: "right" }}>vs PERP</div>
+            <div style={{ display: "flex", alignItems: "center", gap: "6px", justifyContent: "flex-end" }}>
+              <span style={{ fontSize: "10px", fontFamily: T.mono, fontWeight: 700, color: dc(data.cash - pp), minWidth: "40px", textAlign: "right" }}>
                 {data.cash - pp >= 0 ? "+" : ""}{f(data.cash - pp, 2)}
-              </td>
-              <td style={{ padding: "10px" }}><DevBar dev={data.cash - pp} /></td>
-            </tr>
-
-            {/* Instrument rows by category */}
-            {(() => {
-              const cats = [
-                { key: "100s", label: "100s TOUCH & SETTLE", color: T.purple },
-                { key: "SPX", label: "SPX PUT OPTIONS", color: T.amber },
-                { key: "VIX", label: "VIX FUTURES", color: T.blue },
-                { key: "VIXOPT", label: "VIX OPTIONS", color: T.blue },
-              ];
-              return cats.map(cat => {
-                const items = data.instruments.filter(i => i.cat === cat.key);
-                if (!items.length) return null;
-                return (
-                  <React.Fragment key={cat.key}>
-                    <tr>
-                      <td colSpan={7} style={{
-                        padding: "10px 10px 4px", fontSize: mob ? "9px" : "8px", letterSpacing: "1.5px",
-                        fontWeight: 700, color: cat.color, borderBottom: `1px solid ${T.border}20`
-                      }}>
-                        <span style={{ display: "inline-block", width: "5px", height: "5px", borderRadius: "50%", background: cat.color, marginRight: "6px" }} />
-                        {cat.label}
-                      </td>
-                    </tr>
-                    {items.map((inst, i) => (
-                      <tr key={i} style={{ borderBottom: `1px solid ${T.border}15` }}>
-                        <td style={{ padding: "8px 10px", fontWeight: 500 }}>{inst.label}</td>
-                        <td style={{ padding: "8px 10px", color: T.dim, fontSize: "9px" }}>{inst.cat === "SPX" ? "CME" : inst.cat === "VIX" || inst.cat === "VIXOPT" ? "CFE" : "100s"}</td>
-                        <td style={{ padding: "8px 10px", textAlign: "right", fontWeight: 600 }}>
-                          {inst.priceLabel}
-                          {inst.iv && <span style={{ fontSize: mob ? "9px" : "8px", color: T.dim, marginLeft: "6px" }}>{inst.iv}</span>}
-                        </td>
-                        <td style={{ padding: "8px 10px", textAlign: "right", color: T.muted }}>{inst.impliedVIX}</td>
-                        <td style={{ padding: "8px 10px", textAlign: "right", fontWeight: 700, color: dc(inst.dev) }}>
-                          {f(inst.impliedPIX)}
-                        </td>
-                        <td style={{ padding: "8px 10px", textAlign: "right", fontWeight: 700, color: dc(inst.dev) }}>
-                          {inst.dev >= 0 ? "+" : ""}{f(inst.dev, 2)}
-                        </td>
-                        <td style={{ padding: "8px 10px" }}><DevBar dev={inst.dev} /></td>
-                      </tr>
-                    ))}
-                  </React.Fragment>
-                );
-              });
-            })()}
-          </tbody>
-        </table>
+              </span>
+              <div style={{ position: "relative", width: "60px", height: "8px", background: "rgba(255,255,255,.05)", borderRadius: "4px", overflow: "hidden" }}>
+                <div style={{
+                  position: "absolute", top: 0, bottom: 0,
+                  ...(data.cash - pp >= 0
+                    ? { left: "50%", width: `${Math.min(Math.abs(data.cash - pp) / 3, 1) * 50}%` }
+                    : { right: "50%", width: `${Math.min(Math.abs(data.cash - pp) / 3, 1) * 50}%` }),
+                  background: dc(data.cash - pp), borderRadius: "4px"
+                }} />
+                <div style={{ position: "absolute", left: "50%", top: -1, bottom: -1, width: "1px", background: T.dim + "60" }} />
+              </div>
+              <span style={{ fontSize: "8px", fontFamily: T.mono, color: T.dim, minWidth: "36px" }}>REF</span>
+            </div>
+          </div>
         </div>
       </Card>
 
