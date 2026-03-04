@@ -12782,17 +12782,17 @@ const P20ArbWeb = () => {
                       marginBottom: "2px",
                     }}>
                       <div>
-                        <span style={{ fontFamily: T.mono, fontSize: "11px", fontWeight: 600, color: T.text }}>{inst.label}</span>
-                        <span style={{ fontFamily: T.mono, fontSize: "9px", color: T.dim, marginLeft: "8px" }}>{venue}</span>
-                        {inst.iv && <span style={{ fontFamily: T.mono, fontSize: "9px", color: T.dim, marginLeft: "6px" }}>{inst.iv} {inst.cat === "VIX" ? "VOL" : inst.cat === "VIXOPT" ? "VoV" : "IV"}</span>}
+                        <span style={{ fontFamily: T.mono, fontSize: "13px", fontWeight: 600, color: T.text }}>{inst.label}</span>
+                        <span style={{ fontFamily: T.mono, fontSize: "10px", color: T.dim, marginLeft: "8px" }}>{venue}</span>
+                        {inst.iv && <span style={{ fontFamily: T.mono, fontSize: "10px", color: T.dim, marginLeft: "6px" }}>{inst.iv} {inst.cat === "VIX" ? "VOL" : inst.cat === "VIXOPT" ? "VoV" : "IV"}</span>}
                       </div>
                       <div style={{ textAlign: "right" }}>
                         <div style={{ fontSize: "8px", fontFamily: T.mono, color: T.dim, marginBottom: "2px" }}>PRICE</div>
-                        <div style={{ fontFamily: T.mono, fontSize: "11px", fontWeight: 700, color: T.muted }}>{inst.priceLabel}</div>
+                        <div style={{ fontFamily: T.mono, fontSize: "13px", fontWeight: 700, color: T.muted }}>{inst.priceLabel}</div>
                       </div>
                       <div style={{ textAlign: "right" }}>
                         <div style={{ fontSize: "8px", fontFamily: T.mono, color: T.dim, marginBottom: "2px" }}>IMP PIX</div>
-                        <div style={{ fontFamily: T.mono, fontSize: "13px", fontWeight: 800, color: inst.dev > 0.3 ? T.red : inst.dev < -0.3 ? T.green : T.muted }}>
+                        <div style={{ fontFamily: T.mono, fontSize: "15px", fontWeight: 800, color: inst.dev > 0.3 ? T.red : inst.dev < -0.3 ? T.green : T.muted }}>
                           {f(inst.impliedPIX, 1)}
                         </div>
                       </div>
