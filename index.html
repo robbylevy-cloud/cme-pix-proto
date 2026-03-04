@@ -1552,12 +1552,12 @@ const P1 = () => {
         {/* Headline — owns the center */}
         <div style={{ textAlign: "center", marginBottom: "32px", animation: "fadeIn 0.6s ease" }}>
           <div style={{
-            fontSize: mob ? "28px" : "46px", fontWeight: 800, fontFamily: T.display, color: T.text,
-            lineHeight: 1.2, marginBottom: "14px",
+            fontSize: mob ? "22px" : "30px", fontWeight: 800, fontFamily: T.display, color: T.text,
+            lineHeight: 1.2, marginBottom: "10px",
           }}>
             Two ways to price fear.<br />Only one you understand instantly.
           </div>
-          <div style={{ fontSize: "16px", color: T.muted, maxWidth: "800px", margin: "0 auto", lineHeight: 1.7 }}>
+          <div style={{ fontSize: "14px", color: T.muted, maxWidth: "800px", margin: "0 auto", lineHeight: 1.7 }}>
             The S&P 500 drops 5% in a single day. Both instruments spike. But watch what each one tells you.
           </div>
         </div>
@@ -1580,7 +1580,7 @@ const P1 = () => {
               </div>
               <div style={{ display: "flex", alignItems: "baseline", gap: "14px" }}>
                 <div style={{
-                  fontSize: "36px", fontWeight: 800, fontFamily: T.mono,
+                  fontSize: "30px", fontWeight: 800, fontFamily: T.mono,
                   color: shocked ? T.red : T.text,
                   transition: "color 0.3s",
                 }}>
@@ -1644,7 +1644,7 @@ const P1 = () => {
 
             {/* Big number */}
             <div style={{
-              fontSize: mob ? "42px" : "64px", fontWeight: 800, fontFamily: T.mono,
+              fontSize: mob ? "36px" : "52px", fontWeight: 800, fontFamily: T.mono,
               color: T.muted, lineHeight: 1,
               marginBottom: "8px",
               transition: "all 0.3s",
@@ -1706,7 +1706,7 @@ const P1 = () => {
 
             {/* Big number */}
             <div style={{
-              fontSize: mob ? "42px" : "64px", fontWeight: 800, fontFamily: T.mono,
+              fontSize: mob ? "36px" : "52px", fontWeight: 800, fontFamily: T.mono,
               color: T.green, lineHeight: 1,
               marginBottom: "8px",
               transition: "all 0.3s",
@@ -1836,27 +1836,27 @@ const P1 = () => {
                   <div style={{ fontSize: "11px", fontFamily: T.mono, letterSpacing: "1.5px", color: T.dim, marginBottom: "6px" }}>
                     VIX
                   </div>
-                  <div style={{ fontSize: "40px", fontWeight: 800, fontFamily: T.mono, color: T.muted }}>
+                  <div style={{ fontSize: "32px", fontWeight: 800, fontFamily: T.mono, color: T.muted }}>
                     +{vixPct}%
                   </div>
                 </div>
-                <div style={{ fontSize: "24px", color: T.dim, fontFamily: T.mono }}>vs</div>
+                <div style={{ fontSize: "20px", color: T.dim, fontFamily: T.mono }}>vs</div>
                 <div>
                   <div style={{ fontSize: "11px", fontFamily: T.mono, letterSpacing: "1.5px", color: T.dim, marginBottom: "6px" }}>
                     PIX
                   </div>
-                  <div style={{ fontSize: "40px", fontWeight: 800, fontFamily: T.mono, color: T.green }}>
+                  <div style={{ fontSize: "32px", fontWeight: 800, fontFamily: T.mono, color: T.green }}>
                     +{pixPct}%
                   </div>
                 </div>
                 <div style={{
-                  width: "1px", height: "50px", background: T.border,
+                  width: "1px", height: "44px", background: T.border,
                 }} />
                 <div>
                   <div style={{ fontSize: "11px", fontFamily: T.mono, letterSpacing: "1.5px", color: T.dim, marginBottom: "6px" }}>
                     PIX RESPONSIVENESS
                   </div>
-                  <div style={{ fontSize: "40px", fontWeight: 800, fontFamily: T.mono, color: T.green }}>
+                  <div style={{ fontSize: "32px", fontWeight: 800, fontFamily: T.mono, color: T.green }}>
                     {(pixPct / vixPct).toFixed(1)}×
                   </div>
                   <div style={{ fontSize: "13px", color: T.muted, marginTop: "4px" }}>
