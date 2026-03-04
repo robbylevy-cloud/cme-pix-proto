@@ -12540,7 +12540,7 @@ const P20ArbWeb = () => {
       const F = spx * Math.exp(0.04 * dte / 365);
       const iv = spxSkewIV(F, strike, mV, dte);
       const touchProb = touchDNprice(strike, dte, mV);
-      const impVix = impliedVIX(touchProb, tB, dte);
+      const impVix = iVIXfromPutIV(iv, F, strike, dte);
       const impPIX = pixCash(impVix, tB, tD);
       instruments.push({
         label: `Touch ${strike.toLocaleString()} ${dte}d`,
@@ -12558,7 +12558,7 @@ const P20ArbWeb = () => {
       const F = spx * Math.exp(0.04 * dte / 365);
       const iv = spxSkewIV(F, strike, mV, dte);
       const settleProb = settleDNprice(strike, dte, mV);
-      const impVix = impliedVIX(settleProb / 0.52, tB, dte);
+      const impVix = iVIXfromPutIV(iv, F, strike, dte);
       const impPIX = pixCash(impVix, tB, tD);
       instruments.push({
         label: `Settle ${strike.toLocaleString()} ${dte}d`,
