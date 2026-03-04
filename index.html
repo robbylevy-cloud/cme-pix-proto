@@ -12512,35 +12512,59 @@ const P20ArbWeb = () => {
     // Build comparison instruments
     const instruments = [];
 
-    // 100s Touch contracts (price IS the first-passage probability on 100s)
+    // Local strike-vol pricers for 100s contracts (uses spxSkewIV at specific strike)
+    const touchDNprice = (K, dte, mV) => {
+      const F = spx * Math.exp(0.04 * dte / 365);
+      const iv = spxSkewIV(F, K, mV, dte);
+      const Ty = dte / 365;
+      const mu = 0.04 - 0.5 * iv * iv;
+      const h = Math.log(K / spx);
+      const sq = Math.sqrt(Ty);
+      const d1 = (h - mu * Ty) / (iv * sq);
+      const d2 = (h + mu * Ty) / (iv * sq);
+      const ex = Math.max(-500, Math.min(500, (2 * mu * h) / (iv * iv)));
+      return Math.min(99.9, Math.max(0.1, (normalCDF(d1) + Math.exp(ex) * normalCDF(d2)) * 100));
+    };
+
+    const settleDNprice = (K, dte, mV) => {
+      const F = spx * Math.exp(0.04 * dte / 365);
+      const iv = spxSkewIV(F, K, mV, dte);
+      const Ty = dte / 365;
+      const d2 = (Math.log(spx / K) + (0.04 - 0.5 * iv * iv) * Ty) / (iv * Math.sqrt(Ty));
+      return Math.min(99.9, Math.max(0.1, normalCDF(-d2) * 100));
+    };
+
+    // 100s Touch contracts (first-passage probability using spxSkewIV at strike)
     for (const [dte, dvix] of [[14, -0.4], [28, -0.2]]) {
       const mV = vix + dvix * d;
-      const touchProb = pixCash(mV, tB, dte);
+      const F = spx * Math.exp(0.04 * dte / 365);
+      const iv = spxSkewIV(F, strike, mV, dte);
+      const touchProb = touchDNprice(strike, dte, mV);
       const impVix = impliedVIX(touchProb, tB, dte);
       const impPIX = pixCash(impVix, tB, tD);
-      const touchIV = getStripVol(impVix, tB, dte) * 100;
       instruments.push({
         label: `Touch ${strike.toLocaleString()} ${dte}d`,
         cat: "100s", catColor: T.purple,
         price: touchProb, priceLabel: f(touchProb, 1),
-        dte, iv: touchIV.toFixed(1) + "%",
+        dte, iv: (iv * 100).toFixed(1) + "%",
         impliedVIX: f(impVix, 1), impliedPIX: impPIX,
         dev: impPIX - pp,
       });
     }
 
-    // 100s Settle contracts (terminal probability ≈ 0.5× first-passage for same strike/expiry)
+    // 100s Settle contracts (digital put using spxSkewIV at strike)
     for (const [dte, dvix] of [[14, -0.6], [28, -0.3]]) {
       const mV = vix + dvix * d;
-      const settleProb = pixCash(mV, tB, dte) * 0.52;
+      const F = spx * Math.exp(0.04 * dte / 365);
+      const iv = spxSkewIV(F, strike, mV, dte);
+      const settleProb = settleDNprice(strike, dte, mV);
       const impVix = impliedVIX(settleProb / 0.52, tB, dte);
       const impPIX = pixCash(impVix, tB, tD);
-      const settleIV = getStripVol(impVix, tB, dte) * 100;
       instruments.push({
         label: `Settle ${strike.toLocaleString()} ${dte}d`,
         cat: "100s", catColor: T.purple,
         price: settleProb, priceLabel: f(settleProb, 1),
-        dte, iv: settleIV.toFixed(1) + "%",
+        dte, iv: (iv * 100).toFixed(1) + "%",
         impliedVIX: f(impVix, 1), impliedPIX: impPIX,
         dev: impPIX - pp,
       });
