@@ -12535,7 +12535,7 @@ const P20ArbWeb = () => {
     };
 
     // 100s Touch contracts (first-passage probability using spxSkewIV at strike)
-    for (const [dte, dvix] of [[14, -0.4], [28, -0.2]]) {
+    for (const [dte, dvix] of [[14, +1.5], [28, +1.0]]) {
       const mV = vix + dvix * d;
       const F = spx * Math.exp(0.04 * dte / 365);
       const iv = spxSkewIV(F, strike, mV, dte);
@@ -12553,7 +12553,7 @@ const P20ArbWeb = () => {
     }
 
     // 100s Settle contracts (digital put using spxSkewIV at strike)
-    for (const [dte, dvix] of [[14, -0.6], [28, -0.3]]) {
+    for (const [dte, dvix] of [[14, +1.5], [28, +1.0]]) {
       const mV = vix + dvix * d;
       const F = spx * Math.exp(0.04 * dte / 365);
       const iv = spxSkewIV(F, strike, mV, dte);
